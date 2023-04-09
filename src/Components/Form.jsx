@@ -4,6 +4,7 @@ import React, { useState } from "react";
 const Form = () => {
   //Aqui deberan implementar el form completo con sus validaciones
   const [name, setName] = useState("");
+  const [formName, setFormName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
@@ -18,7 +19,8 @@ const Form = () => {
   }
 
   const validateName = () => {
-    return name !== ""; 
+    setFormName(name)
+    return name !== "" && name.length > 5; 
   }
 
   const validateEmail = () => {
@@ -29,25 +31,23 @@ const Form = () => {
   const handeOnSubmit = (e) => {
     e.preventDefault();
 
-    if(validateEmail && validateName) {
+    if(validateEmail() && validateName()) {
       setError(false);
       setMessage(true);
     } else {
       setError(true);
-      setMessage("Error");
+      setMessage("");
     }
-
-    e.reset()
   }
 
   return (
     <div>
       <form onSubmit={handeOnSubmit}>
         <input type="text" placeholder="Ingrese su nombre" onChange={handleOnChangeName} required/>
-        <input type="email" placeholder="Ingrese su nombre" onChange={handleOnChangeEmail} required/>
+        <input type="email" placeholder="Ingrese su correo electronico" onChange={handleOnChangeEmail} required/>
         <button>Enviar</button>
       </form>
-      {message ? <div>{`Gracias ${name}, te contactaremos cuando antes vía mail`}</div> : error}
+      {message ? <div>{`Gracias ${formName}, te contactaremos cuando antes vía mail`}</div> : error && "Por favor verifique su información nuevamente"}
     </div>
   );
 };
